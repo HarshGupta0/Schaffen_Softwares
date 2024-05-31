@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class LandingPage extends StatefulWidget {
@@ -8,12 +9,43 @@ class LandingPage extends StatefulWidget {
 }
 
 class _LandingPageState extends State<LandingPage> {
-  bool _showSearch = false;
+  bool showSearch = false;
+  bool isMute = false;
 
   void _toggleSearch() {
     setState(() {
-      _showSearch = !_showSearch;
+      showSearch = !showSearch;
     });
+  }
+
+  void _showBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          color: Colors.white,
+          child: Wrap(
+            children: [
+              ListTile(
+                leading: const Icon(Icons.person_add),
+                title: const Text('Invite'),
+                onTap: () {},
+              ),
+              ListTile(
+                leading: const Icon(Icons.group_add),
+                title: const Text('Add member'),
+                onTap: () {},
+              ),
+              ListTile(
+                leading: const Icon(Icons.group),
+                title: const Text('Add Group'),
+                onTap: () {},
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -26,12 +58,18 @@ class _LandingPageState extends State<LandingPage> {
               expandedHeight: 350.0,
               floating: false,
               pinned: true,
-              backgroundColor: Color(0xffC32422),
-              leading: BackButton(color: Colors.white),
+              backgroundColor: const Color(0xffC32422),
+              leading: const BackButton(color: Colors.white),
               actions: [
-                IconButton(
-                  icon: Icon(Icons.search, color: Colors.white),
-                  onPressed: _toggleSearch,
+                InkWell(
+                  onTap: () {
+                    _showBottomSheet(context);
+                  },
+                  child: const Icon(
+                    Icons.more_vert,
+                    color: Colors.white,
+                    size: 28,
+                  ),
                 ),
               ],
               flexibleSpace: LayoutBuilder(
@@ -39,26 +77,40 @@ class _LandingPageState extends State<LandingPage> {
                   var top = constraints.biggest.height;
                   return FlexibleSpaceBar(
                     title: top <= 80.0
-                        ? Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'The Weeknd',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 17,
-                            fontWeight: FontWeight.bold,
+                        ? Container(
+                      child: Row(
+                        children: [
+                          Container(
+                            margin:EdgeInsets.only(top: 5),
+                            child: CircleAvatar(
+                              backgroundImage: AssetImage('images/image 121.png',),
+                              radius: 20,
+                            ),
                           ),
-                        ),
-                        Text(
-                          'Community 100k+',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 14,
+                          const SizedBox(width: 20),
+                          const Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'The Weeknd',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                'Community 100k+',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     )
                         : null,
                     background: Stack(
@@ -75,33 +127,67 @@ class _LandingPageState extends State<LandingPage> {
                           child: Container(
                             height: 70.0,
                             color: Color(0xffC32422),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      'The Weeknd',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
+                                Container(
+                                  margin: EdgeInsets.only(left: 30),
+                                  child: const Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            'The Weeknd',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 20,
+                                              letterSpacing: 2 * .8,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                    ),
-                                  ],
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            'Community 100k+',
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 12,
+                                                wordSpacing: 2),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      'Community 100k+',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 16,
-                                      ),
+                                Container(
+                                  height: 40,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    border: Border.all(
+                                      color: Colors.white,
+                                      width: 1.0,
                                     ),
-                                  ],
+                                  ),
+                                  margin: EdgeInsets.only(right: 30),
+                                  child: Row(
+                                    children: [
+                                      IconButton(
+                                        onPressed: () {
+                                          _showBottomSheet(context);
+                                        },
+                                        icon: const Icon(
+                                          Icons.share_rounded,
+                                          color: Colors.white,
+                                          size: 22,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ],
                             ),
@@ -113,7 +199,7 @@ class _LandingPageState extends State<LandingPage> {
                 },
               ),
             ),
-            if (_showSearch)
+            if (showSearch)
               SliverToBoxAdapter(
                 child: Column(
                   children: [
@@ -122,9 +208,9 @@ class _LandingPageState extends State<LandingPage> {
                       child: TextField(
                         decoration: InputDecoration(
                           hintText: 'Search member',
-                          prefixIcon: Icon(Icons.search),
+                          prefixIcon: const Icon(Icons.search),
                           suffixIcon: IconButton(
-                            icon: Icon(Icons.cancel),
+                            icon: const Icon(Icons.cancel),
                             onPressed: _toggleSearch,
                           ),
                           border: OutlineInputBorder(
@@ -132,28 +218,6 @@ class _LandingPageState extends State<LandingPage> {
                           ),
                         ),
                       ),
-                    ),
-                    ListView.builder(
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: 5,
-                      itemBuilder: (context, index) {
-                        return ListTile(
-                          leading: CircleAvatar(
-                            backgroundImage: AssetImage('images/avatar.png'),
-                          ),
-                          title: Text('Yashika, 29, India'),
-                          trailing: index == 0
-                              ? ElevatedButton(
-                            onPressed: () {},
-                            child: Text('Following'),
-                          )
-                              : ElevatedButton(
-                            onPressed: () {},
-                            child: Text('Add'),
-                          ),
-                        );
-                      },
                     ),
                   ],
                 ),
@@ -166,62 +230,100 @@ class _LandingPageState extends State<LandingPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod vestibulum lacus, nec consequat nulla efficitur sit amet. Proin eu lorem libero. Sed id enim in urna tincidunt sodales. Vivamus vel semper ame...Read more',
-                          style: TextStyle(fontSize: 16.0),
-                        ),
-                        SizedBox(height: 16.0),
-                        Wrap(
-                          spacing: 8.0,
-                          runSpacing: 4.0,
-                          children: List.generate(6, (index) {
-                            return Chip(
-                              label: Text('Outdoor'),
-                            );
-                          }),
-                        ),
-                        SizedBox(height: 16.0),
-                        Text(
-                          'Media, docs and links',
-                          style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(height: 16.0),
-                        Container(
-                          height: 120.0,
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: 5,
-                            itemBuilder: (context, index) {
-                              return Padding(
-                                padding: const EdgeInsets.only(right: 8.0),
-                                child: Image.asset('images/image 121.png'),
-                              );
-                            },
+                        Visibility(
+                          visible: !showSearch,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod vestibulum lacus, nec consequat nulla efficitur sit amet. Proin eu lorem libero. Sed id enim in urna tincidunt sodales. Vivamus vel semper ame...Read more',
+                                style: TextStyle(fontSize: 16.0),
+                              ),
+                              const SizedBox(height: 16.0),
+                              SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Row(
+                                  children: [
+                                    for (int i = 0; i < 6; i++)
+                                      Container(
+                                        margin: EdgeInsets.symmetric(horizontal: 6),
+                                        child: OutlinedButton(
+                                          onPressed: () {},
+                                          child: Text('Outdoor'),
+                                          style: OutlinedButton.styleFrom(
+                                            primary: Color(0xffC32422),
+                                            side: BorderSide(color: Color(0xffC32422)),
+                                          ),
+                                        ),
+                                      )
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(height: 16.0),
+                              const Text(
+                                'Media, docs and links',
+                                style: TextStyle(
+                                    fontSize: 18.0,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              const SizedBox(height: 16.0),
+                              Container(
+                                height: 120.0,
+                                child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: 5,
+                                  itemBuilder: (context, index) {
+                                    return Padding(
+                                      padding: const EdgeInsets.only(right: 8.0),
+                                      child: Image.asset('images/image 121.png'),
+                                    );
+                                  },
+                                ),
+                              ),
+                              const SizedBox(height: 16.0),
+                              ListTile(
+                                title: const Text('Mute notification'),
+                                trailing: Switch(
+                                  value: isMute,
+                                  onChanged: (bool value) {
+                                    setState(() {
+                                      isMute = !isMute;
+                                    });
+                                  },
+                                ),
+                              ),
+                              CustomListTile(
+                                  CupertinoIcons.delete, "Clear chat",
+                                  Colors.black, Colors.black, onTap: () {}),
+                              CustomListTile(CupertinoIcons.lock, "Encryption",
+                                  Colors.black, Colors.black, onTap: () {}),
+                              CustomListTile(
+                                  Icons.exit_to_app, "Exit community",
+                                  Colors.red, Colors.red, onTap: () {}),
+                              CustomListTile(
+                                  Icons.thumb_down_alt_outlined, "Report",
+                                  Colors.red, Colors.red, onTap: () {}),
+                              const SizedBox(height: 16.0),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const Text(
+                                    'Members',
+                                    style: TextStyle(
+                                        fontSize: 20.0,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  IconButton(
+                                    onPressed: _toggleSearch,
+                                    icon: const Icon(
+                                      CupertinoIcons.search,
+                                      size: 28,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
-                        ),
-                        SizedBox(height: 16.0),
-                        ListTile(
-                          title: Text('Mute notification'),
-                          trailing: Switch(value: false, onChanged: (bool value) {}),
-                        ),
-                        ListTile(
-                          title: Text('Clear chat'),
-                        ),
-                        ListTile(
-                          title: Text('Encryption'),
-                        ),
-                        ListTile(
-                          title: Text('Exit community'),
-                          trailing: Icon(Icons.exit_to_app),
-                        ),
-                        ListTile(
-                          title: Text('Report'),
-                          trailing: Icon(Icons.report),
-                        ),
-                        SizedBox(height: 16.0),
-                        Text(
-                          'Members',
-                          style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
                         ),
                         ListView.builder(
                           shrinkWrap: true,
@@ -229,8 +331,8 @@ class _LandingPageState extends State<LandingPage> {
                           itemCount: 5,
                           itemBuilder: (context, index) {
                             return ListTile(
-                              leading: CircleAvatar(
-                                backgroundImage: AssetImage('images/avatar.png'),
+                              leading: const CircleAvatar(
+                                backgroundImage: AssetImage('images/image 121.png'),
                               ),
                               title: Text('Yashika, 29, India'),
                               trailing: index == 0
@@ -253,35 +355,27 @@ class _LandingPageState extends State<LandingPage> {
             ),
           ],
         ),
-        bottomSheet: _showSearch
-            ? BottomSheet(
-          onClosing: () {},
-          builder: (BuildContext context) {
-            return Container(
-              color: Colors.white,
-              child: Wrap(
-                children: [
-                  ListTile(
-                    leading: Icon(Icons.person_add),
-                    title: Text('Invite'),
-                    onTap: () {},
-                  ),
-                  ListTile(
-                    leading: Icon(Icons.group_add),
-                    title: Text('Add member'),
-                    onTap: () {},
-                  ),
-                  ListTile(
-                    leading: Icon(Icons.group),
-                    title: Text('Add Group'),
-                    onTap: () {},
-                  ),
-                ],
-              ),
-            );
-          },
-        )
-            : null,
+      ),
+    );
+  }
+
+  Widget CustomListTile(IconData icon, String text, Color iconColor, Color textColor, {required VoidCallback onTap}) {
+    return Container(
+      margin: const EdgeInsets.all(5),
+      child: InkWell(
+        onTap: onTap,
+        highlightColor: Colors.transparent,
+        child: ListTile(
+          leading: Icon(
+            icon,
+            size: 30,
+            color: iconColor,
+          ),
+          title: Text(
+            text,
+            style: TextStyle(fontSize: 16, color: textColor),
+          ),
+        ),
       ),
     );
   }
